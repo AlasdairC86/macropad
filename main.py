@@ -1,3 +1,8 @@
+"""
+circuit python script for macro pad on Rpi Pico 
+switches wired to GPIO 0-9
+"""
+
 import usb_hid
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
@@ -7,50 +12,43 @@ from digitalio import DigitalInOut, Direction, Pull
 
 #board is wired with gpio high and other end of switch connected to ground
 
+"""
+button Layout:
+7 | 4 | 1
+8 | 5 | 2
+9 | 6 | 3
 
+"""
 
 
 #initate keyboard
 kbd = Keyboard(usb_hid.devices)
 
 #set gpio pins for buttons
-B0 = DigitalInOut(board.GP0)
-B1 = DigitalInOut(board.GP1)
-B2 = DigitalInOut(board.GP2)
-B3 = DigitalInOut(board.GP3)
-B4 = DigitalInOut(board.GP4)
-B5 = DigitalInOut(board.GP5)
-B6 = DigitalInOut(board.GP6)
-B7 = DigitalInOut(board.GP7)
-B8 = DigitalInOut(board.GP8)
+B1 = DigitalInOut(board.GP0)
+B2 = DigitalInOut(board.GP1)
+B3 = DigitalInOut(board.GP2)
+B4 = DigitalInOut(board.GP3)
+B5 = DigitalInOut(board.GP4)
+B6 = DigitalInOut(board.GP5)
+B7 = DigitalInOut(board.GP6)
+B8 = DigitalInOut(board.GP7)
+B9 = DigitalInOut(board.GP8)
 
-gpio_pins = ( B0, B1, B2, B3, B4, B5, B6, B7, B8)
+gpio_pins = ( B1, B2, B3, B4, B5, B6, B7, B8, B9)
 
 #setup buttons 
 for pin in gpio_pins:
     pin.direction = Direction.INPUT
     pin.pull = Pull.UP
 
-"""
-button Layout:
-6 | 3 | 0
-7 | 4 | 1
-8 | 5 | 2
 
-"""
-
-macros = {
-    0: [Keycode.CONTROL, Keycode.F8],
-    1: [Keycode.CONTROL, Keycode.F9],
-    2: [Keycode.CONTROL, Keycode.F10], 
-    3: [Keycode.LEFT_CONTROL, Keycode.A],
-    4: [Keycode.LEFT_CONTROL, Keycode.C],
-    5: [Keycode.LEFT_CONTROL, Keycode.V],
-    6: [Keycode.LEFT_CONTROL, Keycode.F7],
-    7: [Keycode.LEFT_CONTROL, Keycode.SPACE],
-    8: [Keycode.LEFT_SHIFT, Keycode.ALT, Keycode.R]        
-            }
-
+macros = ([Keycode.LEFT_CONTROL, Keycode.X],
+            [Keycode.LEFT_CONTROL, Keycode.V], 
+            [Keycode.LEFT_CONTROL, Keycode.A],
+            [Keycode.LEFT_CONTROL, Keycode.Z],
+            [Keycode.ALT, Keycode.LEFT_SHIFT, Keycode.R]         
+            )
 
 
 
@@ -63,8 +61,6 @@ while True:
             kbd.send(*macros[button[0]])
             time.sleep(0.2)
             kbd.release_all()
-            print(*macros[button[0]])
-
 
 
 
